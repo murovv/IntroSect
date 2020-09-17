@@ -41,60 +41,78 @@ public class CaseManager {
             System.out.println("такого задания нет(");
         }
     }
-    public void save(String arg)  {
+    public void save(String arg) {
         int minId = 0;
-        try {
-            if (!(new File(arg).exists())) {
-                File f = new File(arg);
-                f.createNewFile();
-            }
-            Scanner scannerForId1 = new Scanner(new FileReader(arg));
-            while (scannerForId1.hasNextLine()) {
-                minId = scannerForId1.nextInt();
-                scannerForId1.nextLine();
-            }
-            FileWriter fw = new FileWriter(arg, true);
-            for (int i = 0; i < currentTasks.size(); i++) {
-                currentTasks.get(i).id = minId + i + 1;
-                fw.write(currentTasks.get(i).stringToSave());
-            }
+        if (arg.lastIndexOf(".") != -1 && arg.lastIndexOf(".") != 0){
+            if (arg.substring(arg.lastIndexOf(".") + 1).equals("txt")) {
+                try {
+                    if (!(new File(arg).exists())) {
+                        File f = new File(arg);
+                        f.createNewFile();
+                    }
+                    Scanner scannerForId1 = new Scanner(new FileReader(arg));
+                    while (scannerForId1.hasNextLine()) {
+                        minId = scannerForId1.nextInt();
+                        scannerForId1.nextLine();
+                    }
+                    FileWriter fw = new FileWriter(arg, true);
+                    for (int i = 0; i < currentTasks.size(); i++) {
+                        currentTasks.get(i).id = minId + i + 1;
+                        fw.write(currentTasks.get(i).stringToSave());
+                    }
 
-        //теперь нужно почистить буфер записи
-        currentTasks.clear();
-        fw.close();
-        }catch (IOException e){
-            System.out.println("ошибка сохранения");
-            e.printStackTrace();
-        }
+                    //теперь нужно почистить буфер записи
+                    currentTasks.clear();
+                    fw.close();
+                } catch (IOException e) {
+                    System.out.println("ошибка сохранения");
+                    e.printStackTrace();
+                }
+            }
+            else{
+                System.out.println("Некорректное название файла");
+            }
+            }else{
+                System.out.println("Некорректное название файла");
+            }
     }
-    public void load(String arg){
-        //для начала нужно понять какой id присваивать элементам
-        int Id = 0;
-        if(currentTasks.size()!=0){
-            Id = currentTasks.get(currentTasks.size()-1).id;
-        }
-        try {
-            FileReader fr = new FileReader(arg);
-            Scanner fileScanner = new Scanner(fr);
+    public void load(String arg) {
+        if (arg.lastIndexOf(".") != -1 && arg.lastIndexOf(".") != 0) {
+            if (arg.substring(arg.lastIndexOf(".") + 1).equals("txt")) {
+                //для начала нужно понять какой id присваивать элементам
+                int Id = 0;
+                if (currentTasks.size() != 0) {
+                    Id = currentTasks.get(currentTasks.size() - 1).id;
+                }
+                try {
+                    FileReader fr = new FileReader(arg);
+                    Scanner fileScanner = new Scanner(fr);
 
-            while(fileScanner.hasNextLine()){
-                Id++;
-                StringTokenizer st = new StringTokenizer(fileScanner.nextLine());
-                st.nextToken();
-                Task downloadedTask = new Task(Id,st.nextToken(),Boolean.parseBoolean(st.nextToken()));
-                currentTasks.add(downloadedTask);
+                    while (fileScanner.hasNextLine()) {
+                        Id++;
+                        StringTokenizer st = new StringTokenizer(fileScanner.nextLine());
+                        st.nextToken();
+                        Task downloadedTask = new Task(Id, st.nextToken(), Boolean.parseBoolean(st.nextToken()));
+                        currentTasks.add(downloadedTask);
+                    }
+                    //подозреваю, что после чтения файл нужно чистить чтобы не записать эти задания еще раз
+                    PrintWriter deleter = new PrintWriter(new File(arg));
+                    deleter.print("");
+                    deleter.close();
+                    fr.close();
+                } catch (FileNotFoundException fnf) {
+                    System.out.println("такого файла не существует");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
-            //подозреваю, что после чтения файл нужно чистить чтобы не записать эти задания еще раз
-            PrintWriter deleter = new PrintWriter(new File(arg));
-            deleter.print("");
-            deleter.close();
-            fr.close();
-        }catch(FileNotFoundException fnf){
-            System.out.println("такого файла не существует");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+           else {
+                System.out.println("Некорректное название файла");
+            }
+        }else{
+                System.out.println("Некорретное название файла");
+            }
     }
     public void complete(int id){
         boolean found = false;

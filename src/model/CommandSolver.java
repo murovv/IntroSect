@@ -15,23 +15,35 @@ public class CommandSolver {
     public void solve(String command) {
         StringTokenizer st = new StringTokenizer(command);
         String commandName = st.nextToken();
-        switch (commandName) {
-            case "add":
-                caseManager.add(st.nextToken());
-                break;
-            case "delete":
-                caseManager.delete(Integer.parseInt(st.nextToken()));
-                break;
-            case "save":
-                caseManager.save(st.nextToken());
-                break;
-            case "load":
-                caseManager.load(st.nextToken());
-                break;
-            case "complete":
-                caseManager.complete(Integer.parseInt(st.nextToken()));
-            default:
-                System.out.println("Команда не распознана(");
+        if (st.hasMoreTokens()) {
+            switch (commandName) {
+                case "add":
+                    caseManager.add(st.nextToken());
+                    break;
+                case "delete":
+                    try {
+                        caseManager.delete(Integer.parseInt(st.nextToken()));
+                    }catch (NumberFormatException e){
+                        System.out.println("Введено не число");
+                    }
+                    break;
+                case "save":
+                    caseManager.save(st.nextToken());
+                    break;
+                case "load":
+                    caseManager.load(st.nextToken());
+                    break;
+                case "complete":
+                    try {
+                        caseManager.complete(Integer.parseInt(st.nextToken()));
+                    }catch (NumberFormatException e){
+                        System.out.println("Введено не число");
+                    }
+                default:
+                    System.out.println("Команда не распознана(");
+            }
+        }else{
+            System.out.println("аргумент не найден");
         }
     }
 }

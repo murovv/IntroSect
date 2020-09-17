@@ -55,7 +55,7 @@ public class MainFrame extends JFrame {
     }
     public MainFrame(CommandSolver commandSolver){
         this.commandSolver = commandSolver;
-        this.setSize(new Dimension(1280,720));
+        this.setSize(new Dimension(480,320));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setLayout(bl);
@@ -63,29 +63,33 @@ public class MainFrame extends JFrame {
         this.add(scrollPane,BorderLayout.CENTER);
         commandLine.addActionListener(e -> {
             command = commandLine.getText();
-            commandLine.setText("");
-            if(new StringTokenizer(command).nextToken().equals("all")){
-                updateCurrentTasksFromData();
-                updateDataFromCurrentTasks();
-                dft = new DefaultTableModel(data,columnNames);
-                table.setModel(dft);
-                this.repaint();
-            }else if(new StringTokenizer(command).nextToken().equals("completed")){
-                updateCurrentTasksFromData();
-                updateDataFromCurrentTasks();
-                for(int i = 0;i<data.size();i++){
-                    if(!((Boolean) data.get(i).get(2))){
-                        data.remove(i);
-                        i--;//remove сдвигает вектор, тем самым будут пропускаться занчения, поэтому i тоже нужно уменьшить
-                    }
-                }
-                dft = new DefaultTableModel(data,columnNames);
-                table.setModel(dft);
-                this.repaint();
+            if(command.equals("")){
+                System.out.println("команда не распознана");
             }else {
-                dft.fireTableDataChanged();
-                updateCurrentTasksFromData();
-                commandSolver.solve(command);
+                commandLine.setText("");
+                if (new StringTokenizer(command).nextToken().equals("all")) {
+                    updateCurrentTasksFromData();
+                    updateDataFromCurrentTasks();
+                    dft = new DefaultTableModel(data, columnNames);
+                    table.setModel(dft);
+                    this.repaint();
+                } else if (new StringTokenizer(command).nextToken().equals("completed")) {
+                    updateCurrentTasksFromData();
+                    updateDataFromCurrentTasks();
+                    for (int i = 0; i < data.size(); i++) {
+                        if (!((Boolean) data.get(i).get(2))) {
+                            data.remove(i);
+                            i--;//remove сдвигает вектор, тем самым будут пропускаться занчения, поэтому i тоже нужно уменьшить
+                        }
+                    }
+                    dft = new DefaultTableModel(data, columnNames);
+                    table.setModel(dft);
+                    this.repaint();
+                } else {
+                    dft.fireTableDataChanged();
+                    updateCurrentTasksFromData();
+                    commandSolver.solve(command);
+                }
             }
         });
     }
