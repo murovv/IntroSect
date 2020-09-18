@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="IntroSect:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/IntroSect_jar</output-path>
+    <root id="archive" name="IntroSect.jar">
+      <element id="module-output" name="IntroSect" />
+    </root>
+  </artifact>
+</component>
